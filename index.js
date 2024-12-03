@@ -1,12 +1,18 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const { db } = require("./connection");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const followerRoute = require("./routes/follower");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 db.getConnection()
   .then((connection) => {
@@ -16,6 +22,7 @@ db.getConnection()
   .catch((err) => {
     console.error("Error connecting to MySQL:", err);
   });
+
 app.get("/", (req, res) => {
   console.log("Server up!");
   res.status(200).json({ message: "Server up" });
